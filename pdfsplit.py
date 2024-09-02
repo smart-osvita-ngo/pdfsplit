@@ -34,7 +34,7 @@ FILENAMES_TXT_PATH = "filenames.txt"
 
 # ============
 
-VERSION = "0.1"
+VERSION = "0.2"
 
 import os
 import pymupdf
