@@ -85,7 +85,8 @@ remove_venv() {
 
 # ========
 
-if [[ activate_venv() != 0 ]]; then
+activate_venv
+if [[ $? != 0 ]]; then
     echo "Встановлюємо все..."
     create_venv
     install_deps

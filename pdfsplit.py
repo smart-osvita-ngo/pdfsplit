@@ -1,4 +1,4 @@
-# ============
+# (c) 2024 Mykhailo Koreshkov, Smart Osvita NGO
 
 """
 Налаштування розбивача PDF.
@@ -33,10 +33,17 @@ FILENAMES_TXT_PATH = "filenames.txt"
 
 # ============
 
+VERSION = "0.1"
+
 import os
 import pymupdf
-print(pymupdf.__doc__)
 import pandas as pd
+print(
+f"""smart-osvita-ngo/pdfsplit V{VERSION}
+(c) 2024 Mykhailo Koreshkov, Smart Osvita NGO
+"""
+)
+print(pymupdf.__doc__)
 
 def read_xls_column(xls_path: str, sheet: int|str, column: int|str, max_rows: int =1000) -> list:
     data = pd.read_excel(xls_path, sheet, 
@@ -48,7 +55,7 @@ def read_xls_column(xls_path: str, sheet: int|str, column: int|str, max_rows: in
 
 
 def split_pdf(large_pdf_path, npages_in_small_pdf, small_pdf_dir):
-    print("Починаємо розбиття PDF")
+    print(f"Починаємо розбиття PDF файлу {large_pdf_path}")
     doc = pymupdf.open(large_pdf_path)
     npages = doc.page_count;
     assert npages % npages_in_small_pdf == 0, f"Кількість листів великого PDF ({npages}) не ділиться націло на бажану кількість сторінок у частині ({npages_in_small_pdf})"
@@ -79,7 +86,8 @@ def split_pdf(large_pdf_path, npages_in_small_pdf, small_pdf_dir):
         startpage += npages_in_small_pdf
         lastpage += npages_in_small_pdf
     
-    print("Всі частини опрацьовані, кінець скрипту")
+    print("Всі частини опрацьовані, кінець скрипту.")
+    print(f"Шукайте створені файли у теці {os.path.abspath(small_pdf_dir)}")
 
 if __name__ == "__main__":
     split_pdf(
