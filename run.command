@@ -96,3 +96,6 @@ fi
 echo "Запускаємо скрипт..."
 source "./$ENV_NAME/bin/activate"
 python pdfsplit.py
+
+echo "Натисніть [Enter] щоб вийти."
+read
