@@ -1,3 +1,4 @@
+#
 # (c) 2024 Mykhailo Koreshkov, Smart Osvita NGO
 
 """
@@ -61,10 +62,18 @@ def split_pdf(large_pdf_path, npages_in_small_pdf, small_pdf_dir):
     assert npages % npages_in_small_pdf == 0, f"Кількість листів великого PDF ({npages}) не ділиться націло на бажану кількість сторінок у частині ({npages_in_small_pdf})"
     ndocs = npages // npages_in_small_pdf
 
+    global USE_FILENAMES_TXT
     if USE_FILENAMES_TXT == "YES":
         print(f"Використовуватимемо файл {FILENAMES_TXT_PATH} для визначення назв маленьких файлів")
-        filenames = pd.read_csv(FILENAMES_TXT_PATH, header=None)[0]
-        assert len(filenames) == ndocs, f"Очікувана кількість документів ({ndocs}) не збігається із кількістю рядків ({len(filenames)}) у {FILENAMES_TXT_PATH}"
+        try:
+            filenames = pd.read_csv(FILENAMES_TXT_PATH, header=None)[0]
+            assert len(filenames) == ndocs, f"Очікувана кількість документів ({ndocs}) не збігається із кількістю рядків ({len(filenames)}) у {FILENAMES_TXT_PATH}"
+        except pd.errors.EmptyDataError as e:
+            print(f"Файл {FILENAMES_TXT_PATH} порожній. Файли називатимуться просто порядковим номером.")
+            USE_FILENAMES_TXT = "NO"
+        except FileNotFoundError as e:
+            print(f"Файл {FILENAMES_TXT_PATH} не існує!! Файли називатимуться просто порядковим номером.")
+            USE_FILENAMES_TXT = "NO"
 
     print(f"Створюємо теку {small_pdf_dir} для маленьких PDF файлів")
     os.makedirs(small_pdf_dir, exist_ok=True)
